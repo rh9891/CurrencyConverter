@@ -6,9 +6,23 @@ const amountElementTwo = document.getElementById("amount-two");
 const rateElement = document.getElementById("rate");
 const swap = document.getElementById("swap");
 
+const secretKey = config.apiKey;
+
 // Fetch exchange rates and updates the DOM.
 calculate = () => {
-  console.log("Success!");
+  const currencyOne = currencyElementOne.value;
+  const currencyTwo = currencyElementTwo.value;
+
+  fetch(`https://v6.exchangerate-api.com/v6/${secretKey}/latest/${currencyOne}`)
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data);
+      const rate = data.conversion_rates[currencyTwo];
+
+      rateElement.innerText = `1 ${currencyOne} = ${rate} ${currencyTwo}`;
+
+      amountElementTwo.value = (amountElementOne.value * rate).toFixed(2);
+    });
 };
 
 // Event listeners.
